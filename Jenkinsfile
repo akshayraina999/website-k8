@@ -51,6 +51,9 @@ pipeline{
                         // sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
                         sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image push akshayraina/$JOB_NAME:v1.$BUILD_ID'
                         sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image push akshayraina/$JOB_NAME:latest'
+
+                        // Removing docker images from local
+                        sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image rm $JOB_NAME:v1.$BUILD_ID akshayraina/$JOB_NAME:v1.$BUILD_ID akshayraina/$JOB_NAME:latest'
                     }
                 }
             }
@@ -60,6 +63,15 @@ pipeline{
                 sshagent(['kubernetes_server']){
                     sh 'ssh -o StrictHostKeyChecking=no akshay@192.168.1.88'
                     sh 'scp /var/lib/jenkins/workspace/${JOB_NAME}/* akshay@192.168.1.88:/home/pc/k8_test/'
+                }
+            }
+        }
+        stage('Deployment to Kubernetes'){
+            steps{
+                echo "========Deploying Containers to Kubernetes Server========"
+                sshagent(['ansible_server']){
+                    sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
+                    sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 ansible-playbook playbook.yml'
                 }
             }
         }
