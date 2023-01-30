@@ -1,5 +1,10 @@
 pipeline{
     agent any
+
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('dockerpasswd')
+	}
+
     stages{
         stage("SCM Checkout"){
             steps{
@@ -40,8 +45,9 @@ pipeline{
             steps{
                 echo "========Pushing Docker Image========"
                 sshagent(['ansible_server']){
-                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]){
-                        sh "docker login -u akshayraina -p ${dockerhubpwd}"
+                    // withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]){
+                        // sh "docker login -u akshayraina -p ${dockerhubpwd}"
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                         // sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
                         sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image push akshayraina/$JOB_NAME:v1.$BUILD_ID'
                         sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image push akshayraina/$JOB_NAME:latest'
