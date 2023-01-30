@@ -40,8 +40,8 @@ pipeline{
             steps{
                 echo "========Pushing Docker Image========"
                 sshagent(['ansible_server']){
-                    withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_pass')]){
-                        sh "docker login -u akshayraina -p ${docker_pass}"
+                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhub-pwd')]){
+                        sh "docker login -u akshayraina -p ${dockerhub-pwd}"
                         // sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
                         sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image push akshayraina/$JOB_NAME:v1.$BUILD_ID'
                         sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image push akshayraina/$JOB_NAME:latest'
