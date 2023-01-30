@@ -71,7 +71,7 @@ pipeline{
                 echo "========Deploying Containers to Kubernetes Server========"
                 sshagent(['ansible_server']){
                     sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
-                    sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 ansible-playbook playbook.yml'
+                    sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 ansible-playbook /home/ubuntu/playbook.yml'
                 }
             }
         }
