@@ -13,7 +13,7 @@ pipeline{
                 echo "========Sending files to Ansible========"
                 sshagent(['ansible_server']) {
                 sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18'
-                sh 'scp /var/lib/jenkins/workspace/${JOB_NAME}/* root@10.154.14.18:/home/ubuntu'
+                sh 'scp /var/lib/jenkins/workspace/${JOB_NAME}/* root@10.154.14.18:/home/ubuntu/'
                 }
             }
         }
@@ -22,6 +22,7 @@ pipeline{
                 echo "========Building Docker Image========"
                 sshagent(['ansible_server']){
                 sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
+                sh 'pwd'
                 sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
                 }
             }
