@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website_k8
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+     app: website_k8
+  template:
+    metadata:
+      labels:
+        app: website_k8
+    spec:
+      containers:
+      - name: website_k8
+        image: akshayraina/website_k8:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  website_k8
+  labels:
+    app: website_k8
+spec:
+  selector:
+    app:  website_k8
+  ports:
+    - port: 8080
+      targetPort: 80
+      nodePort: 31200
+  type:  LoadBalancer
