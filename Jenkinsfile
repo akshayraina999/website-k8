@@ -22,8 +22,7 @@ pipeline{
                 echo "========Building Docker Image========"
                 sshagent(['ansible_server']){
                 sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 cd /home/ubuntu/'
-                sh 'pwd'
-                sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                sh 'ssh -o StrictHostKeyChecking=no root@10.154.14.18 docker image build -t $JOB_NAME:v1.$BUILD_ID ./home/ubuntu/'
                 }
             }
         }
