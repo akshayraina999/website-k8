@@ -6,14 +6,14 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-     app: website_k8
+     app: website-k8
   template:
     metadata:
       labels:
-        app: website_k8
+        app: website-k8
     spec:
       containers:
-      - name: website_k8
+      - name: website-k8
         image: akshayraina/website_k8:latest
         imagePullPolicy: Always
         ports:
@@ -22,12 +22,12 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name:  website_k8
+  name:  website-k8
   labels:
-    app: website_k8
+    app: website-k8
 spec:
   selector:
-    app:  website_k8
+    app:  website-k8
   ports:
     - port: 8080
       targetPort: 80
